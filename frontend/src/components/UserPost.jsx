@@ -1,10 +1,14 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Avatar } from "@chakra-ui/avatar";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { BsThreeDots } from "react-icons/bs";
+import Actions from "./Actions";
 
 const UserPost = () => {
+  const [liked, setLiked] = useState(false);
+
   return (
     <Link to={"/elonmusk's/post/1"}>
       <Flex gap={3} mb={4} py={5}>
@@ -67,6 +71,10 @@ const UserPost = () => {
           >
             <Image src="/post3.png" w={"full"} />
           </Box>
+
+          <Flex gap={3} my={1}>
+            <Actions liked={liked} setLiked={setLiked} />
+          </Flex>
         </Flex>
       </Flex>
     </Link>
