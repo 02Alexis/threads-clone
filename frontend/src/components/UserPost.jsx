@@ -75,6 +75,16 @@ const UserPost = () => {
           <Flex gap={3} my={1}>
             <Actions liked={liked} setLiked={setLiked} />
           </Flex>
+
+          <Flex gap={2} alignItems={"center"}>
+            <Text color={"gray.light"} fontSize="sm">
+              123 respuestas
+            </Text>
+            <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
+            <Text color={"gray.light"} fontSize="sm">
+              300 Me gusta
+            </Text>
+          </Flex>
         </Flex>
       </Flex>
     </Link>
