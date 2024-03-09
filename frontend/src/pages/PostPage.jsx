@@ -73,7 +73,27 @@ const PostPage = () => {
       </Flex>
       <Divider my={4} />
 
-      <Comment />
+      <Comment
+        comment="¡Luce realmente bien!"
+        createdAt="2d"
+        likes={100}
+        username="kazuto"
+        userAvatar="https://bit.ly/dan-abramov"
+      />
+      <Comment
+        comment="¡Oye, esto se ve genial!"
+        createdAt="1d"
+        likes={34}
+        username="John doe"
+        userAvatar="https://bit.ly/sage-adebayo"
+      />
+      <Comment
+        comment="Asombroso"
+        createdAt="2h"
+        likes={45}
+        username="Yaela"
+        userAvatar="https://bit.ly/prosper-baba"
+      />
     </>
   );
 };
