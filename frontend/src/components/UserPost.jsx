@@ -6,7 +6,7 @@ import { Box, Flex, Text } from "@chakra-ui/layout";
 import { BsThreeDots } from "react-icons/bs";
 import Actions from "./Actions";
 
-const UserPost = () => {
+const UserPost = ({ likes, replies, postImg, postTitle }) => {
   const [liked, setLiked] = useState(false);
 
   return (
@@ -62,15 +62,17 @@ const UserPost = () => {
             </Flex>
           </Flex>
 
-          <Text fontSize={"sm"}>Esta es mi primera publicación</Text>
-          <Box
-            borderRadius={6}
-            overflow={"hidden"}
-            border={"1px solid"}
-            borderColor={"gray.light"}
-          >
-            <Image src="/post3.png" w={"full"} />
-          </Box>
+          <Text fontSize={"sm"}>{postTitle}</Text>
+          {postImg && (
+            <Box
+              borderRadius={6}
+              overflow={"hidden"}
+              border={"1px solid"}
+              borderColor={"gray.light"}
+            >
+              <Image src={postImg} w={"full"} />
+            </Box>
+          )}
 
           <Flex gap={3} my={1}>
             <Actions liked={liked} setLiked={setLiked} />
@@ -78,11 +80,11 @@ const UserPost = () => {
 
           <Flex gap={2} alignItems={"center"}>
             <Text color={"gray.light"} fontSize="sm">
-              123 respuestas
+              {replies} respuestas
             </Text>
             <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
             <Text color={"gray.light"} fontSize="sm">
-              300 Me gusta
+              {likes} Me gusta
             </Text>
           </Flex>
         </Flex>
