@@ -106,4 +106,34 @@ const likeUnlikePost = async (req, res) => {
   }
 };
 
-export { createPost, getPost, deletePost, likeUnlikePost };
+const replyToPost = async (req, res) => {
+  try {
+    const { text } = req.body;
+    const postId = req.params.id;
+    const userId = req.user._id;
+    const userProfilePic = req.user.profilePic;
+    const username = req.user.username;
+
+    if (!text) {
+      return res
+        .status(400)
+        .json({ error: "El campo de texto es obligatorio" });
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ error: "Publicación no encontrada" });
+    }
+
+    const reply = { userId, text, userProfilePic, username };
+
+    post.replies.push(reply);
+    await post.save();
+
+    res.status(200).json({ message: "respuesta agregada exitosamente", reply });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export { createPost, getPost, deletePost, likeUnlikePost, replyToPost };
