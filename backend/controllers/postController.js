@@ -1,6 +1,20 @@
 import User from "../models/UseModel.js";
 import Post from "../models/postModel.js";
 
+const getPost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ error: "Publicación no encontrada" });
+    }
+
+    res.status(200).json({ post });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 const createPost = async (req, res) => {
   try {
     const { postedBy, text, img } = req.body;
@@ -41,4 +55,4 @@ const createPost = async (req, res) => {
   }
 };
 
-export { createPost };
+export { createPost, getPost };
