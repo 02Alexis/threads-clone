@@ -69,4 +69,14 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { signupUser, loginUser };
+const logoutUser = (req, res) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 1 });
+    res.status(200).json({ message: "El usuario cerró sesión exitosamente" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+    console.log("Error en el registro de usuario: ", err.message);
+  }
+};
+
+export { signupUser, loginUser, logoutUser };
