@@ -76,4 +76,34 @@ const deletePost = async (req, res) => {
   }
 };
 
-export { createPost, getPost, deletePost };
+const likeUnlikePost = async (req, res) => {
+  try {
+    const { id: postId } = req.params;
+    const userId = req.user._id;
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ error: "Publicación no encontrada" });
+    }
+
+    const userLikedPost = post.likes.includes(userId);
+
+    if (userLikedPost) {
+      // A diferencia de la publicación
+      await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
+      res
+        .status(200)
+        .json({ message: "La publicación se ha desmarcado correctamente" });
+    } else {
+      // Me gusta la publicación
+      post.likes.push(userId);
+      await post.save();
+      res.status(200).json({ message: "Publicacion marcada correctamente" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export { createPost, getPost, deletePost, likeUnlikePost };
