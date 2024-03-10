@@ -79,4 +79,37 @@ const logoutUser = (req, res) => {
   }
 };
 
-export { signupUser, loginUser, logoutUser };
+const followUnFollowUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userToModify = await User.findById(id);
+    const currentUser = await User.findById(req.user._id);
+
+    if (id === req.user._id.toString())
+      return res
+        .status(400)
+        .json({ error: "No puedes seguirte/dejar de seguirte a ti mismo" });
+
+    if (!userToModify || !currentUser)
+      return res.status(400).json({ error: "Usuario no encontrado" });
+
+    const isFollowing = currentUser.following.includes(id);
+
+    if (isFollowing) {
+      // Dejar de seguir al usuario
+      await User.findByIdAndUpdate(id, { $pull: { followers: req.user._id } });
+      await User.findByIdAndUpdate(req.user._id, { $pull: { following: id } });
+      res.status(200).json({ message: "El usuario dejó de seguir con éxito" });
+    } else {
+      // Seguir usuario
+      await User.findByIdAndUpdate(id, { $push: { followers: req.user._id } });
+      await User.findByIdAndUpdate(req.user._id, { $push: { following: id } });
+      res.status(200).json({ message: "Usuario seguido exitosamente" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+    console.log("Error al seguir Dejar de seguir usuario: ", err.message);
+  }
+};
+
+export { signupUser, loginUser, logoutUser, followUnFollowUser };
