@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Button,
   Flex,
@@ -23,6 +23,7 @@ export default function UpdateProfilePage() {
     bio: user.bio,
     password: "",
   });
+  const fileRef = useRef(null);
 
   return (
     <form>
@@ -37,23 +38,23 @@ export default function UpdateProfilePage() {
           p={6}
         >
           <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
-            User Profile Edit
+            Editar perfil de usuario
           </Heading>
           <FormControl id="userName">
             <Stack direction={["column", "row"]} spacing={6}>
               <Center>
-                <Avatar size="xl" boxShadow={"md"} />
+                <Avatar size="xl" boxShadow={"md"} src={user.profilePic} />
               </Center>
               <Center w="full">
-                <Button w="full">Change Avatar</Button>
-                <Input type="file" hidden />
+                <Button w="full">Cambiar avatar</Button>
+                <Input type="file" hidden ref={fileRef} />
               </Center>
             </Stack>
           </FormControl>
           <FormControl>
-            <FormLabel>Full name</FormLabel>
+            <FormLabel>Nombre completo</FormLabel>
             <Input
-              placeholder="John Doe"
+              placeholder="Alexis Tamayo"
               value={inputs.name}
               onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
               _placeholder={{ color: "gray.500" }}
@@ -61,9 +62,9 @@ export default function UpdateProfilePage() {
             />
           </FormControl>
           <FormControl>
-            <FormLabel>User name</FormLabel>
+            <FormLabel>Nombre de usuario</FormLabel>
             <Input
-              placeholder="johndoe"
+              placeholder="01Alexis"
               value={inputs.username}
               onChange={(e) =>
                 setInputs({ ...inputs, username: e.target.value })
@@ -73,7 +74,7 @@ export default function UpdateProfilePage() {
             />
           </FormControl>
           <FormControl>
-            <FormLabel>Email address</FormLabel>
+            <FormLabel>Dirección de correo electrónico</FormLabel>
             <Input
               placeholder="your-email@example.com"
               value={inputs.email}
@@ -85,7 +86,7 @@ export default function UpdateProfilePage() {
           <FormControl>
             <FormLabel>Bio</FormLabel>
             <Input
-              placeholder="Your bio."
+              placeholder="tú bio."
               value={inputs.bio}
               onChange={(e) => setInputs({ ...inputs, bio: e.target.value })}
               _placeholder={{ color: "gray.500" }}
@@ -93,9 +94,9 @@ export default function UpdateProfilePage() {
             />
           </FormControl>
           <FormControl>
-            <FormLabel>Password</FormLabel>
+            <FormLabel>Contarseña</FormLabel>
             <Input
-              placeholder="password"
+              placeholder="contraseña"
               value={inputs.password}
               onChange={(e) =>
                 setInputs({ ...inputs, password: e.target.value })
@@ -113,7 +114,7 @@ export default function UpdateProfilePage() {
                 bg: "red.500",
               }}
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               bg={"green.400"}
@@ -124,7 +125,7 @@ export default function UpdateProfilePage() {
               }}
               type="submit"
             >
-              Submit
+              Guardar
             </Button>
           </Stack>
         </Stack>
