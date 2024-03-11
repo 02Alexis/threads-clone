@@ -7,7 +7,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
 
-const UserHeader = () => {
+const UserHeader = ({ user }) => {
   const toast = useToast();
 
   const copyURL = () => {
@@ -28,10 +28,10 @@ const UserHeader = () => {
       <Flex justifyContent={"space-between"} w={"full"}>
         <Box>
           <Text fontSize={"2xl"} fontWeight={"bold"}>
-            Elon Musk
+            {user.name}
           </Text>
           <Flex gap={2} alignItems={"center"}>
-            <Text fontSize={"sm"}>elonmusk</Text>
+            <Text fontSize={"sm"}>{user.username}</Text>
             <Text
               fontSize={"xs"}
               bg={"gray.dark"}
@@ -45,24 +45,34 @@ const UserHeader = () => {
         </Box>
 
         <Box>
-          <Avatar
-            name="Elon Mush"
-            src="/avatar.jpg"
-            size={{
-              base: "md",
-              md: "xl",
-            }}
-          />
+          {user.profilePic && (
+            <Avatar
+              name={user.name}
+              src={user.profilePic}
+              size={{
+                base: "md",
+                md: "xl",
+              }}
+            />
+          )}
+
+          {!user.profilePic && (
+            <Avatar
+              name={user.name}
+              src="https://res.cloudinary.com/drrpq9vlk/image/upload/v1687100083/ewkblrrhu7gdfymvw1hq.jpg"
+              size={{
+                base: "md",
+                md: "xl",
+              }}
+            />
+          )}
         </Box>
       </Flex>
 
-      <Text>
-        Tracking Elon Musk's Private Jet (N628TS) with a bot using public ADS-B
-        data grndcntrlnet , contact @Jxck.Sweeney
-      </Text>
+      <Text>{user.bio}</Text>
       <Flex w={"full"} justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>
-          <Text color={"gray.light"}>171 mil Seguidores</Text>
+          <Text color={"gray.light"}>{user.followers.length} Seguidores</Text>
           <Box w="1" h="1" bg={"gray.light"} borderRadius={"full"}></Box>
           <Link color={"gray.light"}>grndcntrl.net</Link>
         </Flex>
