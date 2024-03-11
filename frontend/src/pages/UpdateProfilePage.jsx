@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useRecoilState } from "recoil";
 import {
   Button,
   Flex,
@@ -11,8 +12,8 @@ import {
   Avatar,
   Center,
 } from "@chakra-ui/react";
-import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
+import usePreviewImg from "../hooks/usePreviewImg";
 
 export default function UpdateProfilePage() {
   const [user, setUser] = useRecoilState(userAtom);
@@ -24,6 +25,7 @@ export default function UpdateProfilePage() {
     password: "",
   });
   const fileRef = useRef(null);
+  const { handleImageChange, imgUrl } = usePreviewImg();
 
   return (
     <form>
@@ -43,11 +45,22 @@ export default function UpdateProfilePage() {
           <FormControl id="userName">
             <Stack direction={["column", "row"]} spacing={6}>
               <Center>
-                <Avatar size="xl" boxShadow={"md"} src={user.profilePic} />
+                <Avatar
+                  size="xl"
+                  boxShadow={"md"}
+                  src={imgUrl || user.profilePic}
+                />
               </Center>
               <Center w="full">
-                <Button w="full">Cambiar avatar</Button>
-                <Input type="file" hidden ref={fileRef} />
+                <Button w="full" onClick={() => fileRef.current.click()}>
+                  Cambiar avatar
+                </Button>
+                <Input
+                  type="file"
+                  hidden
+                  ref={fileRef}
+                  onChange={handleImageChange}
+                />
               </Center>
             </Stack>
           </FormControl>
