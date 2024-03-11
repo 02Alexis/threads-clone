@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import userAtom from "../atoms/userAtom";
 import usePreviewImg from "../hooks/usePreviewImg";
+import useShowToast from "../hooks/useShowToast";
 
 export default function UpdateProfilePage() {
   const [user, setUser] = useRecoilState(userAtom);
@@ -25,10 +26,35 @@ export default function UpdateProfilePage() {
     password: "",
   });
   const fileRef = useRef(null);
+  const showToast = useShowToast();
   const { handleImageChange, imgUrl } = usePreviewImg();
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`/api/users/update/${user._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...inputs, profilePic: imgUrl }),
+      });
+      const data = await res.json(); // objeto de usuario actualizado
+
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+      showToast("Success", "Perfil actualizado con éxito", "success");
+      setUser(data);
+      localStorage.setItem("user-threads", JSON.stringify(data));
+    } catch (error) {
+      showToast("Error", error, "error");
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <Flex align={"center"} justify={"center"} my={6}>
         <Stack
           spacing={4}
