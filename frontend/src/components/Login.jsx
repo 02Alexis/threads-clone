@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Flex,
   Box,
@@ -14,14 +15,44 @@ import {
   useColorModeValue,
   Link,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import authScreenAtom from "../atoms/authAtom";
 import { useSetRecoilState } from "recoil";
+import useShowToast from "../hooks/useShowToast";
+import authScreenAtom from "../atoms/authAtom";
+import userAtom from "../atoms/userAtom";
 
 export default function Login() {
+  const [inputs, setInputs] = useState({
+    username: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const setAuthScreen = useSetRecoilState(authScreenAtom);
+  const setUser = useSetRecoilState(userAtom);
+
+  const showToast = useShowToast();
+
+  const handleLogin = async () => {
+    try {
+      const res = await fetch("/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(inputs),
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+
+      localStorage.setItem("user-threads", JSON.stringify(data));
+      setUser(data);
+    } catch (error) {
+      showToast("Error", error, "error");
+    }
+  };
 
   return (
     <Flex align={"center"} justify={"center"}>
@@ -44,12 +75,30 @@ export default function Login() {
           <Stack spacing={4}>
             <FormControl isRequired>
               <FormLabel>Nombre de Usuario</FormLabel>
-              <Input type="text" />
+              <Input
+                type="text"
+                value={inputs.username}
+                onChange={(e) =>
+                  setInputs((inputs) => ({
+                    ...inputs,
+                    username: e.target.value,
+                  }))
+                }
+              />
             </FormControl>
             <FormControl isRequired>
               <FormLabel>Contraseña</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? "text" : "password"} />
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={inputs.password}
+                  onChange={(e) =>
+                    setInputs((inputs) => ({
+                      ...inputs,
+                      password: e.target.value,
+                    }))
+                  }
+                />
                 <InputRightElement h={"full"}>
                   <Button
                     variant={"ghost"}
@@ -71,6 +120,7 @@ export default function Login() {
                 _hover={{
                   bg: useColorModeValue("gray.700", "gray.800"),
                 }}
+                onClick={handleLogin}
               >
                 Login
               </Button>
