@@ -174,7 +174,10 @@ const updateUser = async (req, res) => {
 
     user = await user.save();
 
-    res.status(200).json({ message: "actualización de perfil exitosa", user });
+    // la contraseña debe ser nula en respuesta
+    user.password = null;
+
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
     console.log("Error al actualizar usuario: ", err.message);
