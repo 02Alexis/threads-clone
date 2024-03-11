@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
-export default function SignupCard() {
+export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -25,7 +25,7 @@ export default function SignupCard() {
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
-            Sign up
+            Login
           </Heading>
         </Stack>
         <Box
@@ -33,28 +33,18 @@ export default function SignupCard() {
           bg={useColorModeValue("white", "gray.dark")}
           boxShadow={"lg"}
           p={8}
+          w={{
+            base: "full",
+            sm: "400px",
+          }}
         >
           <Stack spacing={4}>
-            <HStack>
-              <Box>
-                <FormControl isRequired>
-                  <FormLabel>Nombre completo</FormLabel>
-                  <Input type="text" />
-                </FormControl>
-              </Box>
-              <Box>
-                <FormControl isRequired>
-                  <FormLabel>Nombre de usuario</FormLabel>
-                  <Input type="text" />
-                </FormControl>
-              </Box>
-            </HStack>
             <FormControl isRequired>
-              <FormLabel>Dirección de correo electrónico</FormLabel>
-              <Input type="email" />
+              <FormLabel>Nombre de Usuario</FormLabel>
+              <Input type="text" />
             </FormControl>
             <FormControl isRequired>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Contraseña</FormLabel>
               <InputGroup>
                 <Input type={showPassword ? "text" : "password"} />
                 <InputRightElement h={"full"}>
@@ -71,7 +61,7 @@ export default function SignupCard() {
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
-                loadingText="Submitting"
+                loadingText="Logging in"
                 size="lg"
                 bg={useColorModeValue("gray.600", "gray.700")}
                 color={"white"}
@@ -79,12 +69,12 @@ export default function SignupCard() {
                   bg: useColorModeValue("gray.700", "gray.800"),
                 }}
               >
-                Sign up
+                Login
               </Button>
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>
-                ¿Ya eres usuario? <Link color={"blue.400"}>Login</Link>
+                ¿No tienes una cuenta? <Link color={"blue.400"}>Sign up</Link>
               </Text>
             </Stack>
           </Stack>
