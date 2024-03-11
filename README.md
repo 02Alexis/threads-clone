@@ -21,6 +21,8 @@
 - Seguir/dejar de seguir usuarios
 - Modo oscuro/claro
 
+<p align="right">(<a href="#readme-top">volver arriba</a>)</p>
+
 ## Para empezar
 
 ### Instalación del front:
@@ -52,6 +54,8 @@
    ```
    http://localhost:5173
    ```
+
+<p align="right">(<a href="#readme-top">volver arriba</a>)</p>
 
 ### Instalación del back:
 
