@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Avatar } from "@chakra-ui/avatar";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, Text } from "@chakra-ui/layout";
+import { formatDistanceToNow } from "date-fns";
 import Actions from "./Actions";
 import useShowToast from "../hooks/useShowToast";
 
@@ -112,7 +113,7 @@ const Post = ({ post, postedBy }) => {
                 textAlign={"right"}
                 color={"gray.light"}
               >
-                1 ago
+                {formatDistanceToNow(new Date(post.createdAt))} ago
               </Text>
             </Flex>
           </Flex>
