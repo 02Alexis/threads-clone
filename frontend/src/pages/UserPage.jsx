@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
 import { Flex, Spinner } from "@chakra-ui/react";
 import UserHeader from "../components/UserHeader";
 import useShowToast from "../hooks/useShowToast";
 import Post from "../components/Post";
 import useGetUserProfile from "../hooks/useGetUserProfile";
+import postsAtom from "../atoms/postsAtom";
 
 const UserPage = () => {
   const { user, loading } = useGetUserProfile();
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useRecoilState(postsAtom);
   const [fetchingPosts, setFetchingPosts] = useState(true);
 
   const { username } = useParams();
@@ -30,7 +32,7 @@ const UserPage = () => {
     };
 
     getPosts();
-  }, [username, showToast]);
+  }, [username, showToast, setPosts]);
 
   if (!user && loading) {
     return (
@@ -57,12 +59,7 @@ const UserPage = () => {
       )}
 
       {posts.map((post) => (
-        <Post
-          key={post._id}
-          post={post}
-          postedBy={post.postedBy}
-          setPosts={setPosts}
-        />
+        <Post key={post._id} post={post} postedBy={post.postedBy} />
       ))}
     </>
   );
