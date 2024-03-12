@@ -20,12 +20,15 @@ import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 
 const Actions = ({ post: post_ }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const user = useRecoilValue(userAtom);
   const [liked, setLiked] = useState(post_.likes.includes(user?._id));
-  const showToast = useShowToast();
   const [post, setPost] = useState(post_);
   const [isLiking, setIsLiking] = useState(false);
+  const [isReplying, setIsReplying] = useState(false);
+  const [reply, setReply] = useState("");
+
+  const showToast = useShowToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleLikeAndUnlike = async () => {
     if (!user)
@@ -61,6 +64,39 @@ const Actions = ({ post: post_ }) => {
       showToast("Error", error.message, "error");
     } finally {
       setIsLiking(false);
+    }
+  };
+
+  const handleReply = async () => {
+    if (!user)
+      return showToast(
+        "Error",
+        "Debes iniciar sesión para responder a una publicación.",
+        "error"
+      );
+
+    if (isReplying) return;
+    setIsReplying(true);
+
+    try {
+      const res = await fetch("/api/posts/reply/" + post._id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: reply }),
+      });
+      const data = await res.json();
+      if (data.error) return showToast("Error", data.error, "error");
+
+      setPost({ ...post, replies: [...post.replies, data.reply] });
+      showToast("Éxito", "Respuesta publicada con éxito", "success");
+      onClose();
+      setReply("");
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    } finally {
+      setIsReplying(false);
     }
   };
 
@@ -125,12 +161,22 @@ const Actions = ({ post: post_ }) => {
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
-              <Input placeholder="La respuesta va aquí.." />
+              <Input
+                placeholder="La respuesta va aquí.."
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+              />
             </FormControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" size={"sm"} mr={3}>
+            <Button
+              colorScheme="blue"
+              size={"sm"}
+              mr={3}
+              isLoading={isReplying}
+              onClick={handleReply}
+            >
               Responder
             </Button>
           </ModalFooter>
