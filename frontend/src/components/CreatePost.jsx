@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { useParams } from "react-router-dom";
 import {
   Button,
   CloseButton,
@@ -38,6 +39,7 @@ const CreatePost = () => {
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
   const [loading, setLoading] = useState(false);
+  const { username } = useParams();
 
   const handleTextChange = (e) => {
     const inputText = e.target.value;
@@ -72,8 +74,12 @@ const CreatePost = () => {
         showToast("Error", data.error, "error");
         return;
       }
+
       showToast("Éxito", "Publicación creada exitosamente", "success");
-      setPosts([data, ...posts]);
+
+      if (username === user.username) {
+        setPosts([data, ...posts]);
+      }
       onClose();
       setPostText("");
       setImgUrl("");
