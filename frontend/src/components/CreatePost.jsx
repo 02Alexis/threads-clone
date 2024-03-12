@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   Button,
   CloseButton,
@@ -24,6 +24,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import usePreviewImg from "../hooks/usePreviewImg";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
+import postsAtom from "../atoms/postsAtom";
 
 const MAX_CHAR = 500;
 
@@ -33,6 +34,7 @@ const CreatePost = () => {
   const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
   const imageRef = useRef(null);
   const [remainingChar, setRemainingChar] = useState(MAX_CHAR);
+  const [posts, setPosts] = useRecoilState(postsAtom);
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
   const [loading, setLoading] = useState(false);
@@ -71,6 +73,7 @@ const CreatePost = () => {
         return;
       }
       showToast("Éxito", "Publicación creada exitosamente", "success");
+      setPosts([data, ...posts]);
       onClose();
       setPostText("");
       setImgUrl("");
