@@ -20,7 +20,6 @@ const UserPage = () => {
       try {
         const res = await fetch(`/api/posts/user/${username}`);
         const data = await res.json();
-        console.log(data);
         setPosts(data);
       } catch (error) {
         showToast("Error", error.message, "error");
@@ -58,7 +57,12 @@ const UserPage = () => {
       )}
 
       {posts.map((post) => (
-        <Post key={post._id} post={post} postedBy={post.postedBy} />
+        <Post
+          key={post._id}
+          post={post}
+          postedBy={post.postedBy}
+          setPosts={setPosts}
+        />
       ))}
     </>
   );

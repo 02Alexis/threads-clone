@@ -10,7 +10,7 @@ import Actions from "./Actions";
 import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
 
-const Post = ({ post, postedBy }) => {
+const Post = ({ post, postedBy, setPosts }) => {
   const navigate = useNavigate();
 
   const currentUser = useRecoilValue(userAtom);
@@ -58,6 +58,7 @@ const Post = ({ post, postedBy }) => {
       }
 
       showToast("Success", "Publicación eliminada", "success");
+      setPosts((prev) => prev.filter((p) => p._id !== post._id));
     } catch (error) {
       showToast("Error", error.message, "error");
     }
