@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -20,6 +20,8 @@ import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
 
 const PostPage = () => {
+  const navigate = useNavigate();
+
   const { user, loading } = useGetUserProfile();
   const [post, setPost] = useState(null);
   const showToast = useShowToast();
@@ -45,6 +47,30 @@ const PostPage = () => {
 
     getPost();
   }, [showToast, pid, setPost]);
+
+  const handleDeletePost = async () => {
+    try {
+      if (
+        !window.confirm(
+          "¿Estás seguro de que deseas eliminar esta publicación?"
+        )
+      )
+        return;
+
+      const res = await fetch(`/api/posts/${post._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+      showToast("Éxito", "Publicación eliminada", "success");
+      navigate(`/${user.username}`);
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    }
+  };
 
   if (!user && loading) {
     return (
@@ -79,7 +105,11 @@ const PostPage = () => {
             {formatDistanceToNow(new Date(post.createdAt))} ago
           </Text>
           {currentUser?._id === user._id && (
-            <DeleteIcon size={20} cursor={"pointer"} />
+            <DeleteIcon
+              size={20}
+              cursor={"pointer"}
+              onClick={handleDeletePost}
+            />
           )}
         </Flex>
       </Flex>
