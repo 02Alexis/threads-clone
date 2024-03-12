@@ -9,6 +9,7 @@ const Actions = ({ post: post_ }) => {
   const [liked, setLiked] = useState(post_.likes.includes(user?._id));
   const showToast = useShowToast();
   const [post, setPost] = useState(post_);
+  const [isLiking, setIsLiking] = useState(false);
 
   const handleLikeAndUnlike = async () => {
     if (!user)
@@ -17,6 +18,9 @@ const Actions = ({ post: post_ }) => {
         "Debes iniciar sesión para dar me gusta a una publicación.",
         "error"
       );
+
+    if (isLiking) return;
+    setIsLiking(true);
 
     try {
       const res = await fetch("/api/posts/like/" + post._id, {
@@ -40,6 +44,7 @@ const Actions = ({ post: post_ }) => {
     } catch (error) {
       showToast("Error", error.message, "error");
     } finally {
+      setIsLiking(false);
     }
   };
 
