@@ -19,7 +19,7 @@ cloudinary.config({
 });
 
 // middleware
-app.use(express.json()); // Para dividir datos JSON en el cuerpo de la solicitud
+app.use(express.json({ limit: "50mb" })); // Para dividir datos JSON en el cuerpo de la solicitud
 app.use(express.urlencoded({ extended: true })); // Para analizar los datos del formulario en el cuerpo de la solicitud
 app.use(cookieParser());
 
