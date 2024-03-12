@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar } from "@chakra-ui/avatar";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, Text } from "@chakra-ui/layout";
@@ -7,6 +7,8 @@ import Actions from "./Actions";
 import useShowToast from "../hooks/useShowToast";
 
 const Post = ({ post, postedBy }) => {
+  const navigate = useNavigate();
+
   const [liked, setLiked] = useState(false);
   const [user, setUser] = useState(null);
   const showToast = useShowToast();
@@ -34,10 +36,18 @@ const Post = ({ post, postedBy }) => {
   if (!user) return null;
 
   return (
-    <Link to={`/alexis/post/1`}>
+    <Link to={`/${user.username}/post/${post._id}`}>
       <Flex gap={3} mb={4} py={5}>
         <Flex flexDirection={"column"} alignItems={"center"}>
-          <Avatar size="md" name={user.name} src={user?.profilePic} />
+          <Avatar
+            size="md"
+            name={user.name}
+            src={user?.profilePic}
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(`/${user.username}`);
+            }}
+          />
           <Box w="1px" h={"full"} bg="gray.light" my={2}></Box>
           <Box position={"relative"} w={"full"}>
             {post.replies.length === 0 && <Text textAlign={"center"}>🥱</Text>}
@@ -83,7 +93,14 @@ const Post = ({ post, postedBy }) => {
         <Flex flex={1} flexDirection={"column"} gap={2}>
           <Flex justifyContent={"space-between"} w={"full"}>
             <Flex w={"full"} alignItems={"center"}>
-              <Text fontSize={"sm"} fontWeight={"bold"}>
+              <Text
+                fontSize={"sm"}
+                fontWeight={"bold"}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(`/${user.username}`);
+                }}
+              >
                 {user?.username}
               </Text>
               <Image src="/verified.png" w={4} h={4} ml={1} />
