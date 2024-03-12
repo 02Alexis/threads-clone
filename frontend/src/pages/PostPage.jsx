@@ -144,13 +144,13 @@ const PostPage = () => {
       </Flex>
       <Divider my={4} />
 
-      {/* <Comment
-        comment="¡Luce realmente bien!"
-        createdAt="2d"
-        likes={100}
-        username="kazuto"
-        userAvatar="https://bit.ly/dan-abramov"
-      /> */}
+      {post.replies.map((reply) => (
+        <Comment
+          key={reply._id}
+          reply={reply}
+          lastReply={reply._id === post.replies[post.replies.length - 1]._id}
+        />
+      ))}
     </>
   );
 };
