@@ -4,6 +4,7 @@ import {
   deletePost,
   getFeedPosts,
   getPost,
+  getUserPosts,
   likeUnlikePost,
   replyToPost,
 } from "../controllers/postController.js";
