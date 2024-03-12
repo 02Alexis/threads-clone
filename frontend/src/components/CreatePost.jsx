@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useRecoilValue } from "recoil";
 import {
   Button,
   CloseButton,
@@ -21,6 +22,8 @@ import {
 import { BsFillImageFill } from "react-icons/bs";
 import { AddIcon } from "@chakra-ui/icons";
 import usePreviewImg from "../hooks/usePreviewImg";
+import userAtom from "../atoms/userAtom";
+import useShowToast from "../hooks/useShowToast";
 
 const MAX_CHAR = 500;
 
@@ -30,6 +33,8 @@ const CreatePost = () => {
   const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
   const imageRef = useRef(null);
   const [remainingChar, setRemainingChar] = useState(MAX_CHAR);
+  const user = useRecoilValue(userAtom);
+  const showToast = useShowToast();
 
   const handleTextChange = (e) => {
     const inputText = e.target.value;
@@ -44,7 +49,23 @@ const CreatePost = () => {
     }
   };
 
-  const handleCreatePost = async () => {};
+  const handleCreatePost = async () => {
+    const res = await fetch("/api/posts/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ postedBy: user._id, text: postText, img: imgUrl }),
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      showToast("Error", data.error, "error");
+      return;
+    }
+    showToast("Éxito", "Publicación creada exitosamente", "success");
+    onClose();
+  };
 
   return (
     <>
