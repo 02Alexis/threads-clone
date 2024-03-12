@@ -1,10 +1,26 @@
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 
 const Actions = ({ post: post_ }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const user = useRecoilValue(userAtom);
   const [liked, setLiked] = useState(post_.likes.includes(user?._id));
   const showToast = useShowToast();
@@ -76,6 +92,7 @@ const Actions = ({ post: post_ }) => {
           role="img"
           viewBox="0 0 24 24"
           width="20"
+          onClick={onOpen}
         >
           <title>Comentario</title>
           <path
@@ -100,6 +117,25 @@ const Actions = ({ post: post_ }) => {
           {post.likes.length} Me gusta
         </Text>
       </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <Input placeholder="La respuesta va aquí.." />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" size={"sm"} mr={3}>
+              Responder
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 };
