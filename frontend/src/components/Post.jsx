@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar } from "@chakra-ui/avatar";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, Text } from "@chakra-ui/layout";
+import { DeleteIcon } from "@chakra-ui/icons";
 import { formatDistanceToNow } from "date-fns";
 import Actions from "./Actions";
 import useShowToast from "../hooks/useShowToast";
+import userAtom from "../atoms/userAtom";
 
 const Post = ({ post, postedBy }) => {
   const navigate = useNavigate();
 
   const [liked, setLiked] = useState(false);
+  const currentUser = useRecoilValue(userAtom);
   const [user, setUser] = useState(null);
   const showToast = useShowToast();
 
@@ -115,6 +119,8 @@ const Post = ({ post, postedBy }) => {
               >
                 {formatDistanceToNow(new Date(post.createdAt))} ago
               </Text>
+
+              {currentUser?._id === user._id && <DeleteIcon size={20} />}
             </Flex>
           </Flex>
 
