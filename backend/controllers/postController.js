@@ -75,6 +75,11 @@ const deletePost = async (req, res) => {
         .json({ error: "No autorizado para eliminar publicación" });
     }
 
+    if (post.img) {
+      const imgId = post.img.split("/").pop().split(".")[0];
+      await cloudinary.uploader.destroy(imgId);
+    }
+
     await Post.findByIdAndDelete(req.params.id);
 
     res.status(200).json({ message: "Publicación eliminada exitosamente" });
