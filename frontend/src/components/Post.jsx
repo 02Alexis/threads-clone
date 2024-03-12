@@ -13,7 +13,6 @@ import userAtom from "../atoms/userAtom";
 const Post = ({ post, postedBy }) => {
   const navigate = useNavigate();
 
-  const [liked, setLiked] = useState(false);
   const currentUser = useRecoilValue(userAtom);
   const [user, setUser] = useState(null);
   const showToast = useShowToast();
@@ -37,6 +36,32 @@ const Post = ({ post, postedBy }) => {
 
     getUser();
   }, [postedBy, showToast]);
+
+  const handleDeletePost = async (e) => {
+    try {
+      e.preventDefault();
+      if (
+        !window.confirm(
+          "¿Estás seguro de que deseas eliminar esta publicación?"
+        )
+      )
+        return;
+
+      const res = await fetch(`/api/posts/${post._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+
+      showToast("Success", "Publicación eliminada", "success");
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    }
+  };
 
   if (!user) return null;
 
@@ -120,7 +145,9 @@ const Post = ({ post, postedBy }) => {
                 {formatDistanceToNow(new Date(post.createdAt))} ago
               </Text>
 
-              {currentUser?._id === user._id && <DeleteIcon size={20} />}
+              {currentUser?._id === user._id && (
+                <DeleteIcon size={20} onClick={handleDeletePost} />
+              )}
             </Flex>
           </Flex>
 
