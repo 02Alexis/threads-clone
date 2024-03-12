@@ -108,7 +108,7 @@ const UserHeader = ({ user }) => {
           {!user.profilePic && (
             <Avatar
               name={user.name}
-              src="https://res.cloudinary.com/drrpq9vlk/image/upload/v1687100083/ewkblrrhu7gdfymvw1hq.jpg"
+              src={user.profilePic}
               size={{
                 base: "md",
                 md: "xl",
