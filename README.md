@@ -29,8 +29,8 @@
 ![mobile](https://github.com/02Alexis/threads-clone/assets/99287560/10376522-e80d-4532-b8db-f4693446d2ce)
 ![mobile_1](https://github.com/02Alexis/threads-clone/assets/99287560/b67152d7-26ad-4575-a934-a11534fb10b8)
 
-![desktop](https://github.com/02Alexis/threads-clone/assets/99287560/45e8e78b-fe1e-452e-91f3-acbb3ff7e1a0)
-![desktop_2](https://github.com/02Alexis/threads-clone/assets/99287560/a19f2e82-ef2d-441f-a723-1accec4d588c)
+![desktop](https://github.com/02Alexis/threads-clone/assets/99287560/fd83a154-6af8-410e-adbb-ec5c4dd42da9)
+![desktop_2](https://github.com/02Alexis/threads-clone/assets/99287560/0f334096-0a09-4527-9b41-dfa34d3b4630)
 
 <p align="right">(<a href="#readme-top">volver arriba</a>)</p>
 
