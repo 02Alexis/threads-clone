@@ -33,6 +33,7 @@ const PostPage = () => {
 
   useEffect(() => {
     const getPost = async () => {
+      setPosts([]);
       try {
         const res = await fetch(`/api/posts/${pid}`);
         const data = await res.json();
@@ -88,7 +89,7 @@ const PostPage = () => {
     <>
       <Flex>
         <Flex w={"full"} alignItems={"center"} gap={3}>
-          <Avatar src={user.profilePic} size={"md"} name="alex" />
+          <Avatar src={user.profilePic} size={"md"} name="Alexis" />
           <Flex>
             <Text fontSize={"sm"} fontWeight={"bold"}>
               {user.username}
@@ -96,7 +97,6 @@ const PostPage = () => {
             <Image src="/verified.png" w="4" h={4} ml={4} />
           </Flex>
         </Flex>
-
         <Flex gap={4} alignItems={"center"}>
           <Text
             fontSize={"xs"}
@@ -106,6 +106,7 @@ const PostPage = () => {
           >
             {formatDistanceToNow(new Date(currentPost.createdAt))} ago
           </Text>
+
           {currentUser?._id === user._id && (
             <DeleteIcon
               size={20}
@@ -142,10 +143,10 @@ const PostPage = () => {
             Haz que la aplicación dé me gusta, responda y publique.
           </Text>
         </Flex>
-        <Button>Conseguir</Button>
+        <Button>Obtener</Button>
       </Flex>
-      <Divider my={4} />
 
+      <Divider my={4} />
       {currentPost.replies.map((reply) => (
         <Comment
           key={reply._id}
