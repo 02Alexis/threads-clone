@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
 import User from "../models/UseModel.js";
+import Post from "../models/postModel.js";
+
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 
 const getUserProfile = async (req, res) => {
@@ -185,6 +187,18 @@ const updateUser = async (req, res) => {
     user.bio = bio || user.bio;
 
     user = await user.save();
+
+    // Encuentre todas las publicaciones que este usuario respondió y actualice los campos de nombre de usuario y foto de perfil de usuario.
+    await Post.updateMany(
+      { "replies.userId": userId },
+      {
+        $set: {
+          "replies.$[reply].username": user.username,
+          "replies.$[reply].userProfilePic": user.profilePic,
+        },
+      },
+      { arrayFilters: [{ "reply.userId": userId }] }
+    );
 
     // la contraseña debe ser nula en respuesta
     user.password = null;
