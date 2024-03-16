@@ -12,14 +12,28 @@
 
 ## Características principales
 
-- Autenticación y Autorización con JWT
-- Crear publicaciones (con imágenes)
-- Eliminar publicaciones
-- Actualizar perfil de usuario
-- Me gusta/No me gusta una publicación
-- Responder a una publicación
-- Seguir/dejar de seguir usuarios
-- Modo oscuro/claro
+-  🌟 Tech stack: MERN  + Chakra UI
+-  🎃 Autenticación y autorización con JWT
+-  📝 Crear publicación
+-  🗑️ Eliminar mensaje (con imágenes)
+- 💱 Actualizar perfil de usuario
+- ❤️ Me gusta/No me gusta la publicación
+- 💬 Comentar una publicación
+- 👥 Seguir/dejar de seguir usuarios
+- 🌓 Modo oscuro/claro
+- 📱 Completamente responsivo
+
+
+### Setup .env file
+
+```js
+PORT=...
+MONGO_URI=...
+JWT_SECRET=...
+CLOUD_NAME=...
+CLOUD_API_KEY=...
+CLOUD_API_SECRET=...
+```
 
 <p align="right">(<a href="#readme-top">volver arriba</a>)</p>
 
