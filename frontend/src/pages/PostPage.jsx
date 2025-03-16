@@ -89,10 +89,10 @@ const PostPage = () => {
     <>
       <Flex>
         <Flex w={"full"} alignItems={"center"} gap={3}>
-          <Avatar src={user.profilePic} size={"md"} name="Alexis" />
+          <Avatar src={user?.profilePic} size={"md"} name="Alexis" />
           <Flex>
             <Text fontSize={"sm"} fontWeight={"bold"}>
-              {user.username}
+              {user?.username}
             </Text>
             <Image src="/verified.png" w="4" h={4} ml={4} />
           </Flex>
@@ -107,7 +107,7 @@ const PostPage = () => {
             {formatDistanceToNow(new Date(currentPost.createdAt))} ago
           </Text>
 
-          {currentUser?._id === user._id && (
+          {currentUser?._id === user?._id && (
             <DeleteIcon
               size={20}
               cursor={"pointer"}
