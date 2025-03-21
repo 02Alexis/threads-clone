@@ -8,16 +8,22 @@ import {
   useColorModeValue,
   WrapItem,
   Box,
+  useColorMode,
 } from "@chakra-ui/react";
 import { BsFillImageFill } from "react-icons/bs";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { BsCheck2All } from "react-icons/bs";
+import { selectedConversationAtom } from "../atoms/messagesAtom";
 
 function Conversation({ conversation }) {
   const user = conversation.participants[0];
   const currentUser = useRecoilValue(userAtom);
   const lastMessage = conversation.lastMessage;
+  const [selectedConversation, setSelectedConversation] = useRecoilState(selectedConversationAtom);
+  const colorMode = useColorMode();
+
+  console.log("selectedConversation", selectedConversation);  
 
   return (
     <Flex
@@ -30,6 +36,17 @@ function Conversation({ conversation }) {
         color: "white",
       }}
       borderRadius={"md"}
+      onClick={() => {
+        setSelectedConversation({
+          _id: conversation._id,
+          userId: user._id,
+          username: user.username,
+          userProfilePic: user.profilePic,
+        });
+      }}
+      bg={
+        selectedConversation?._id === conversation._id ? (colorMode === "light" ? "gray.400" : "gray.dark") : ""
+      }
     >
       <WrapItem>
         <Avatar
