@@ -9,17 +9,18 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-// import { GiConversation } from "react-icons/gi";
+import { GiConversation } from "react-icons/gi";
 import Conversation from "../components/Conversation";
 import MessageContainer from "../components/MessageContainer";
 import { useEffect, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import { useRecoilState } from "recoil";
-import { conversationsAtom } from "../atoms/messagesAtom";
+import { conversationsAtom, selectedConversationAtom } from "../atoms/messagesAtom";
 
 function ChatPage() {
   const [conversations, setConversations] = useRecoilState(conversationsAtom);
   const [loadingConversations, setLoadingConversations] = useState(true);
+  const [selectedConversation, setSelectedConversation] = useRecoilState(selectedConversationAtom);
   const showToast = useShowToast();
 
   useEffect(() => {
@@ -110,21 +111,22 @@ function ChatPage() {
               />
             ))}
         </Flex>
-        {/* <Flex
-          flex={70}
-          borderRadius={"md"}
-          p={2}
-          flexDir={"column"}
-          alignItems={"center"}
-          justifyContent={"center"}
-          height={"400px"}
-        >
-          <GiConversation size={100} />
-          <Text fontSize={20}>
-            Seleccione una conversación para comenzar a mensajear
-          </Text>
-        </Flex> */}
-        <MessageContainer />
+        {!selectedConversation._id && (
+          <Flex
+            flex={70}
+            borderRadius={"md"}
+            p={2}
+            flexDir={"column"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            height={"400px"}
+          >
+            <GiConversation size={100} />
+            <Text fontSize={20}>Seleccione una conversación para comenzar a mensajear</Text>
+          </Flex>
+        )}
+
+        {selectedConversation._id && <MessageContainer />}
       </Flex>
     </Box>
   );

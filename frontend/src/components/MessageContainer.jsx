@@ -1,8 +1,51 @@
-import { Flex, useColorModeValue, Avatar, Text, Image, Divider, Skeleton, SkeletonCircle } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import {
+  Flex,
+  useColorModeValue,
+  Avatar,
+  Text,
+  Image,
+  Divider,
+  Skeleton,
+  SkeletonCircle,
+} from "@chakra-ui/react";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
+import useShowToast from "../hooks/useShowToast";
+import { useRecoilValue } from "recoil";
+import { selectedConversationAtom } from "../atoms/messagesAtom";
+import userAtom from "../atoms/userAtom";
 
 function MessageContainer() {
+  const showToast = useShowToast();
+  const selectedConversation = useRecoilValue(selectedConversationAtom);
+  const [loadingMessages, setLoadingMessages] = useState(true);
+  const [messages, setMessages] = useState([]);
+  const currentUser = useRecoilValue(userAtom);
+
+  useEffect(() => {
+    const getMessages = async () => {
+      setLoadingMessages(true);
+      setMessages([]);
+      try {
+        if (selectedConversation.mock) return;
+        const res = await fetch(`/api/messages/${selectedConversation.userId}`);
+        const data = await res.json();
+        if (data.error) {
+          showToast("Error", data.error, "error");
+          return;
+        }
+        setMessages(data);
+      } catch (error) {
+        showToast("Error", error.message, "error");
+      } finally {
+        setLoadingMessages(false);
+      }
+    };
+
+    getMessages();
+  }, [showToast, selectedConversation.userId]);
+
   return (
     <Flex
       flex="70"
@@ -13,9 +56,12 @@ function MessageContainer() {
     >
       {/* Message header */}
       <Flex w={"full"} h={12} alignItems={"center"} gap={2}>
-        <Avatar src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9gfoI56xriQfclLy0E7e831RBfKlvr8-r5A&s' size={"sm"} />
+        <Avatar
+          src={selectedConversation.userProfilePic}
+          size={"sm"}
+        />
         <Text display={"flex"} alignItems={"center"}>
-          Jazmin
+          {selectedConversation.username}
           <Image src="/verified.png" w={4} h={4} ml={1} />
         </Text>
       </Flex>
@@ -30,7 +76,7 @@ function MessageContainer() {
         height={"400px"}
         overflowY={"auto"}
       >
-        {false &&
+        {loadingMessages &&
           [...Array(5)].map((_, i) => (
             <Flex
               key={i}
@@ -50,12 +96,20 @@ function MessageContainer() {
             </Flex>
           ))}
 
-            <Flex
-              direction={"column"}
-            >
-              <Message ownMessage={true} />
-              <Message ownMessage={false} />
-            </Flex>
+        <Flex direction={"column"}>
+          {!loadingMessages &&
+            messages.map((message) => (
+              <Flex
+                key={message._id}
+                direction={"column"}
+              >
+                <Message
+                  message={message}
+                  ownMessage={currentUser._id === message.sender}
+                />
+              </Flex>
+            ))}
+        </Flex>
       </Flex>
 
       <MessageInput />
