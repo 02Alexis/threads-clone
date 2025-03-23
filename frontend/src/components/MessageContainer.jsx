@@ -13,7 +13,10 @@ import Message from "./Message";
 import MessageInput from "./MessageInput";
 import useShowToast from "../hooks/useShowToast";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { conversationsAtom, selectedConversationAtom } from "../atoms/messagesAtom";
+import {
+  conversationsAtom,
+  selectedConversationAtom,
+} from "../atoms/messagesAtom";
 import userAtom from "../atoms/userAtom";
 import { useSocket } from "../context/SocketContext";
 
@@ -25,32 +28,37 @@ function MessageContainer() {
   const currentUser = useRecoilValue(userAtom);
   const setConversations = useSetRecoilState(conversationsAtom);
   const { socket } = useSocket();
+  const messageEndRef = useRef(null);
 
   useEffect(() => {
-		socket.on("newMessage", (message) => {
-			if (selectedConversation._id === message.conversationId) {
-				setMessages((prev) => [...prev, message]);
-			}
+    socket.on("newMessage", (message) => {
+      if (selectedConversation._id === message.conversationId) {
+        setMessages((prev) => [...prev, message]);
+      }
 
-			setConversations((prev) => {
-				const updatedConversations = prev.map((conversation) => {
-					if (conversation._id === message.conversationId) {
-						return {
-							...conversation,
-							lastMessage: {
-								text: message.text,
-								sender: message.sender,
-							},
-						};
-					}
-					return conversation;
-				});
-				return updatedConversations;
-			});
-		});
+      setConversations((prev) => {
+        const updatedConversations = prev.map((conversation) => {
+          if (conversation._id === message.conversationId) {
+            return {
+              ...conversation,
+              lastMessage: {
+                text: message.text,
+                sender: message.sender,
+              },
+            };
+          }
+          return conversation;
+        });
+        return updatedConversations;
+      });
+    });
 
-		return () => socket.off("newMessage");
-	}, [socket]);
+    return () => socket.off("newMessage");
+  }, [socket, selectedConversation, setConversations]);
+
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -85,10 +93,7 @@ function MessageContainer() {
     >
       {/* Message header */}
       <Flex w={"full"} h={12} alignItems={"center"} gap={2}>
-        <Avatar
-          src={selectedConversation.userProfilePic}
-          size={"sm"}
-        />
+        <Avatar src={selectedConversation.userProfilePic} size={"sm"} />
         <Text display={"flex"} alignItems={"center"}>
           {selectedConversation.username}
           <Image src="/verified.png" w={4} h={4} ml={1} />
@@ -125,20 +130,23 @@ function MessageContainer() {
             </Flex>
           ))}
 
-        <Flex direction={"column"}>
-          {!loadingMessages &&
-            messages.map((message) => (
-              <Flex
-                key={message._id}
-                direction={"column"}
-              >
-                <Message
-                  message={message}
-                  ownMessage={currentUser._id === message.sender}
-                />
-              </Flex>
-            ))}
-        </Flex>
+        {!loadingMessages &&
+          messages.map((message) => (
+            <Flex
+              key={message._id}
+              direction={"column"}
+              ref={
+                messages.length - 1 === messages.indexOf(message)
+                  ? messageEndRef
+                  : null
+              }
+            >
+              <Message
+                message={message}
+                ownMessage={currentUser._id === message.sender}
+              />
+            </Flex>
+          ))}
       </Flex>
 
       <MessageInput setMessages={setMessages} />
