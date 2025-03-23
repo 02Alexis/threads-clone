@@ -112,7 +112,7 @@ function MessageContainer() {
         </Flex>
       </Flex>
 
-      <MessageInput />
+      <MessageInput setMessages={setMessages} />
     </Flex>
   );
 }
