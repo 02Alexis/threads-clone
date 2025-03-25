@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Creación de rama que contiene solo el diseño y funcionalidades
