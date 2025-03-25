@@ -22,7 +22,8 @@
 - 👥 Seguir/dejar de seguir usuarios
 - 🌓 Modo oscuro/claro
 - 📱 Completamente responsivo
-
+- 💬 Aplicación de chat con soporte de imagen
+- 👀 Estado visto/invisible para mensajes
 
 ### Setup .env file
 
@@ -47,6 +48,10 @@ CLOUD_API_SECRET=...
 ![desktop_2](https://github.com/02Alexis/threads-clone/assets/99287560/0f334096-0a09-4527-9b41-dfa34d3b4630)
 
 <p align="right">(<a href="#readme-top">volver arriba</a>)</p>
+
+## Chat 
+![image](https://github.com/user-attachments/assets/bd3d9ad7-5a12-4dc4-88dd-a1d0d4c7df2e)
+![Imagen de WhatsApp 2025-03-25 a las 12 40 05_5e6d81ed](https://github.com/user-attachments/assets/482aa943-2ec0-46ad-a92a-909c806d797c)
 
 ## Para empezar
 
